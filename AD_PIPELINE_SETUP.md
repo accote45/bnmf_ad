@@ -72,14 +72,33 @@ the multi-ancestry comparison scripts.
 - Cognitive / reserve: general cognitive function, educational attainment
 - Related: PD / ALS / FTD-LBD, parental lifespan / longevity, depression, sleep
 
+## Reuse source (confirmed)
+
+- Harmonized cardiometabolic sumstats: `SRC = /sc/arion/projects/paul_oreilly/lab/lioul01/multiancestry_polygenic/sumstats/harmonized/`
+- **Read access CONFIRMED** (group `paul_oreilly`; 569 files). Format:
+  `VAR_ID  RSID  Effect_Allele  P_VALUE  BETA  SE  N  MAF  EAF`, VAR_ID = `chr_pos_A1_A2`
+  with alleles alphabetically sorted.
+- Files are ~1 GB each -> **symlink, never copy**. `scripts/setup/link_reuse_sumstats.sh`
+  links the 19 v1 reuse files into `sumstats/harmonized/`.
+
+## AD GWAS reference (confirmed)
+
+- Source = the **127 significant loci** from the full-cohort AD analysis (not a subset).
+- Build: **hg19/GRCh37** (no liftover). Lead SNP coded `chr:pos:effect:other`.
+- Rich file: rsID, alleles (ref/other/effect), beta, SE, OR, z_value, n_case/n_control,
+  gene annotations (Predicted effector gene, ClosestGene, FLAMES).
+- Processing: small dedicated converter (127 rows) -> harmonized reference file
+  (`VAR_ID` alphabetical, `Effect_Allele`, `BETA`/Z, `P`). NOT the genome-wide harmonizer.
+
 ## Open items / TODO
 
-- [ ] Confirm read access to `lioul01`'s harmonized cardiometabolic sumstats on
-      Minerva (else re-harmonize the ones we reuse).
-- [ ] Decide data home on Minerva (personal `accote45` space vs shared lab).
-- [ ] **Provide the AD GWAS** (path/citation, genome build, column format) -> Phase 1.
-- [ ] Finalize v1 trait list.
-- [ ] Clone `bnmf_ad` on Minerva.
+- [x] Confirm read access to `lioul01`'s harmonized sumstats — DONE.
+- [x] AD GWAS form/build confirmed (127 loci, hg19).
+- [ ] Decide data home on Minerva (personal `cotea02`/`accote45` space vs shared lab).
+- [ ] Clone `bnmf_ad` on Minerva; run `scripts/setup/link_reuse_sumstats.sh`.
+- [ ] **Source the new AD-specific trait GWAS** (in progress — takes time).
+- [ ] Draft the 127-loci converter (ready to write; needs the actual file to test).
+- [ ] Finalize v1 trait list once new GWAS are in hand.
 
 ## Phases
 
