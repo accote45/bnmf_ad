@@ -24,13 +24,16 @@
 set -uo pipefail
 export OPENBLAS_NUM_THREADS=1
 
-# --- Activate gwaslab env (self-contained for the LSF job) ---------------
-ANACONDA_MODULE="${ANACONDA_MODULE:-anaconda3/2025.06}"
-CONDA_ENV="${CONDA_ENV:-gwaslab}"
-module load "${ANACONDA_MODULE}" 2>/dev/null || true
-source "$(conda info --base)/etc/profile.d/conda.sh"
-conda activate "${CONDA_ENV}"
-python -c "import gwaslab" 2>/dev/null || { echo "ERROR: gwaslab not importable in env '${CONDA_ENV}'"; exit 1; }
+# --- Activate gwaslab env --------------------------------------------------
+# Source conda directly (do NOT rely on `module`, which is not initialized in a
+# non-login LSF batch shell). Override CONDA_SH / CONDA_ENV via env vars if paths differ.
+CONDA_SH="${CONDA_SH:-/hpc/packages/minerva-rocky9/miniforge3/26.1.1-3/miniforge/etc/profile.d/conda.sh}"
+CONDA_ENV="${CONDA_ENV:-/hpc/users/cotea02/.conda/envs/gwaslab}"
+[ -f "${CONDA_SH}" ] || { echo "ERROR: conda.sh not found at ${CONDA_SH}"; exit 1; }
+source "${CONDA_SH}"
+conda activate "${CONDA_ENV}" || { echo "ERROR: cannot activate ${CONDA_ENV}"; exit 1; }
+python -c "import gwaslab" || { echo "ERROR: gwaslab not importable in ${CONDA_ENV}"; exit 1; }
+echo "Using python: $(which python)"
 
 # --- Paths ---------------------------------------------------------------
 # PROJECT_ROOT = the bnmf_ad clone (auto-detected from this script's location).
