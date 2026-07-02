@@ -1,0 +1,20 @@
+## B3.2 Decile Biomarker & Risk Plots Configuration
+## Decile-stratified LDL, HbA1c, PCE, PREVENT plots per bNMF cluster
+
+biomarker_file: "results/b3_1_analysis/biomarker_phenotypes.tsv"
+prs_file: "results/b1_analysis/prs_hard_assignment/prs/cluster_prs_all.tsv"
+covariate_file: "results/a0_analysis/prs_ct/covariates.txt"
+
+cluster_labels:
+  K1: "Lpa"
+  K2: "Metabolic Syndrome"
+  K3: "Glucose 1"
+  K4: "Lipid"
+  K5: "ALP"
+  K6: "Adiponectin-SHBG"
+  K7: "Metabolic Syndrome-Inflammatory"
+  K8: "Platelet"
+  K9: "Glucose 2"
+  K10: "Lipid-Liver"
+
+results_dir: "results/b3_2_analysis"

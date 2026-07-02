@@ -1,0 +1,46 @@
+# GWAS summary statistics (large data files)
+sumstats/
+
+# Reference panels (1000G)
+reference/
+
+# Pipeline output
+results/
+
+# Synthetic test data
+tests/test_data/
+
+# Claude Code local settings
+.claude/
+CLAUDE.md
+
+# HPC job logs
+logs/
+
+# Snakemake internal files
+.snakemake/
+
+tools/
+
+profiles/
+
+phenotypes/
+
+.vscode/
+
+.RData
+
+# Data files (sample IDs, etc.)
+data/
+
+# Python cache
+__pycache__/
+
+# Stray R graphics-device artifact
+Rplots.pdf
+
+# Local R library for b3_1 ggh4x 0.2.6 (rocky9 migration workaround)
+.rlib_ggh4x41/
+
+# stray PLINK run log at repo root
+/plink.log

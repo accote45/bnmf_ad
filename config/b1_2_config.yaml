@@ -1,0 +1,51 @@
+## B1.2 Sensitivity Analysis Configuration
+## Pathway PRS (PRSet) vs bNMF Cluster PRS Comparison
+## Meta-analyze T2D + CAD META GWAS -> PRSet -> compare top 9 pathways to K1-K9
+
+gwas:
+  t2d: "sumstats/harmonized/Suzuki_Nature_2024.t2d.META.GRCh37.processed.txt.gz"
+  cad: "sumstats/harmonized/Tcheandjieu_NatureMed_2023.CAD.META.GRCh37.processed.txt.gz"
+
+genotypes:
+  prefix: "/sc/arion/projects/paul_oreilly/data/Biobanks/UKB/imputed/qced_data/chr{chr}_qced"
+  prsice_target: "/sc/arion/projects/paul_oreilly/data/Biobanks/UKB/imputed/qced_data/chr#_qced"
+
+phenotypes:
+  phenotype_file: "results/a0_analysis/prs_ct/phenotypes_combined.txt"
+  covariate_file: "results/a0_analysis/prs_ct/covariates.txt"
+
+samples:
+  eur_train: "results/b1_analysis/samples/eur_train.keep"
+  eur_validation: "results/b1_analysis/samples/eur_validation.keep"
+
+pathway:
+  gmt_file: "/sc/arion/projects/paul_oreilly/data/Functional_Genomics/pathway_databases/msigdb/qced_data/c2.all.v2023.2.Hs.symbols.gmt_filtered.txt"
+  gtf_file: "/sc/arion/projects/paul_oreilly/lab/kestir01/Homo_sapiens.GRCh37.75.gtf"
+
+tools:
+  prsice_bin: "tools/PRSice_linux"
+
+prset:
+  wind_3: 35000
+  wind_5: 35000
+  threads: 16
+  seed: 47
+
+b1_results: "results/b1_analysis/association_results_all.csv"
+
+analysis:
+  n_top_pathways: 9
+  max_pathway_snps: 150
+
+cluster_labels:
+  K1: "Lpa"
+  K2: "Insulin Sensitivity"
+  K3: "Metabolic Syndrome"
+  K4: "Lipid Protective"
+  K5: "Atherogenic-Inflammatory"
+  K6: "Adiponectin"
+  K7: "SHBG"
+  K8: "Platelet"
+  K9: "ALP"
+
+results_dir: "results/b1_2_analysis"

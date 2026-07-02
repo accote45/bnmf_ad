@@ -1,0 +1,45 @@
+# B1 Comparison: Core Split-UKB Arm (K=6 clusters from 30 shared traits, split-UKB GWAS)
+# Shares sample split with all B1 arms for fair comparison.
+
+ancestry:
+  admixture_file: "/sc/arion/projects/paul_oreilly/data/Biobanks/CrossBiobank_qc/GeneticDerived_Ancestry/admixture/data/UKB/ukb.5.Q"
+  eur_threshold: 0.80
+  afr_threshold: 0.60
+  eas_threshold: 0.60
+  sas_threshold: 0.60
+  withdrawn_file: "/sc/arion/projects/paul_oreilly/data/ukb/withdrawn/withdraw18177_398_20240119.txt"
+
+split:
+  train_fraction: 0.80
+  seed: 47
+
+a1_results:
+  w_matrix: "results/a1_analysis_core_splitukb/EUR/W_matrix_EUR.tsv"
+  filtered_variants: "results/a1_analysis_core_splitukb/EUR/filtered_variants_EUR.tsv"
+
+gwas:
+  t2d: "sumstats/harmonized/Suzuki_Nature_2024.t2d.EUR.GRCh37.txt.gz"
+  cad: "sumstats/harmonized/Tcheandjieu_NatureMed_2023.CAD.EUR.GRCh37.processed.txt.gz"
+
+genotypes:
+  prefix: "/sc/arion/projects/paul_oreilly/data/Biobanks/UKB/imputed/qced_data/chr{chr}_qced"
+
+phenotypes:
+  phenotype_file: "results/a0_analysis/prs_ct/phenotypes_combined.txt"
+  covariate_file: "results/a0_analysis/prs_ct/covariates.txt"
+
+# Exclude GWAS derivation samples (337,250 IIDs used for split-UKB GWAS)
+exclude_samples: "data/splitukb_gwas_iids.txt"
+
+# Shared sample directory (all B1 arms use identical .keep files)
+samples_dir: "results/b1_comparison/samples"
+
+results_dir: "results/b1_comparison/core_splitukb"
+
+cluster_labels:
+  K1: "Glucose+"
+  K2: "Body Composition-"
+  K3: "Reticulocytes"
+  K4: "Metabolic Syndrome"
+  K5: "Triglycerides ApoA"
+  K6: "Triglycerides-"

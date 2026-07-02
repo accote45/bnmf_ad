@@ -1,0 +1,37 @@
+## B2.1 Survival Analysis Configuration
+## Time-to-comorbidity analysis: T2D/CAD composite by 10 META cluster PRS
+## Uses weighted PRS from b1 analysis (W-matrix weighted scores)
+
+survival_phenotypes: "results/b2_analysis/survival_phenotypes.tsv"
+
+b1_results:
+  prs_file: "results/b1_analysis/prs/cluster_prs_all.tsv"
+  samples_dir: "results/b1_analysis/samples"
+
+phenotypes:
+  covariate_file: "results/a0_analysis/prs_ct/covariates.txt"
+
+gw_prs:
+  file: "results/b1_analysis/prs/genomewide_prs_all.tsv"
+  cad_col: "GW_CAD"
+  t2d_col: "GW_T2D"
+
+analysis:
+  clusters: ["K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K9", "K10"]
+  thresholds: [0.67, 0.80, 0.90]
+  threshold_labels: ["top33", "top20", "top10"]
+  sample_group: "eur_validation"
+
+cluster_labels:
+  K1: "Lpa"
+  K2: "Adiponectin"
+  K3: "Platelet"
+  K4: "SHBG"
+  K5: "Blood Pressure-Stature"
+  K6: "Metabolic"
+  K7: "Triglycerides-HDL"
+  K8: "ALP-LDL"
+  K9: "Obesity"
+  K10: "Glycemic"
+
+results_dir: "results/b2_1_analysis"

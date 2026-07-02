@@ -1,0 +1,132 @@
+# A1 Analysis Pipeline Configuration — Split-UKB Arm
+# ---------------------------------------------------
+# bNMF factorization using 74 trait GWAS from 50% UK Biobank (EUR only).
+# Variant universe from published CAD + T2D GWAS (same as main pipeline).
+# Comparison arm against the published-GWAS pipeline in a1_config.yaml.
+
+ancestries:
+  - EUR
+
+# Variant universe selection GWAS (CAD + T2D) — same as published arm
+ref_gwas:
+  EUR:
+    CAD: "sumstats/harmonized/Tcheandjieu_NatureMed_2023.CAD.EUR.GRCh37.processed.txt.gz"
+    T2D: "sumstats/harmonized/Suzuki_Nature_2024.t2d.EUR.GRCh37.txt.gz"
+
+# 74 trait GWAS from 50% UKB split (EUR only)
+trait_gwas:
+  EUR:
+    AgeHayFever: "sumstats/harmonized_splitukb/splitUKB.3761.AgeHayFever.EUR.GRCh37.processed.txt.gz"
+    Albumin: "sumstats/harmonized_splitukb/splitUKB.30600.Albumin.EUR.GRCh37.processed.txt.gz"
+    AlphanumTrail: "sumstats/harmonized_splitukb/splitUKB.20157.AlphanumTrail.EUR.GRCh37.processed.txt.gz"
+    AnkleSpacing: "sumstats/harmonized_splitukb/splitUKB.3143.AnkleSpacing.EUR.GRCh37.processed.txt.gz"
+    ApolipoproteinA: "sumstats/harmonized_splitukb/splitUKB.30630.ApolipoproteinA.EUR.GRCh37.processed.txt.gz"
+    BMI: "sumstats/harmonized_splitukb/splitUKB.21001.BMI.EUR.GRCh37.processed.txt.gz"
+    BMR: "sumstats/harmonized_splitukb/splitUKB.23105.BMR.EUR.GRCh37.processed.txt.gz"
+    BirthWeight: "sumstats/harmonized_splitukb/splitUKB.20022.BirthWeight.EUR.GRCh37.processed.txt.gz"
+    BodyFatPct: "sumstats/harmonized_splitukb/splitUKB.23099.BodyFatPct.EUR.GRCh37.processed.txt.gz"
+    BodyImpedance: "sumstats/harmonized_splitukb/splitUKB.23106.BodyImpedance.EUR.GRCh37.processed.txt.gz"
+    Calcium: "sumstats/harmonized_splitukb/splitUKB.30680.Calcium.EUR.GRCh37.processed.txt.gz"
+    Cholesterol: "sumstats/harmonized_splitukb/splitUKB.30690.Cholesterol.EUR.GRCh37.processed.txt.gz"
+    Creatinine: "sumstats/harmonized_splitukb/splitUKB.30700.Creatinine.EUR.GRCh37.processed.txt.gz"
+    EosinophilPct: "sumstats/harmonized_splitukb/splitUKB.30210.EosinophilPct.EUR.GRCh37.processed.txt.gz"
+    Eosinophils: "sumstats/harmonized_splitukb/splitUKB.30150.Eosinophils.EUR.GRCh37.processed.txt.gz"
+    FEVBest: "sumstats/harmonized_splitukb/splitUKB.20150.FEVBest.EUR.GRCh37.processed.txt.gz"
+    FEVZscore: "sumstats/harmonized_splitukb/splitUKB.20256.FEVZscore.EUR.GRCh37.processed.txt.gz"
+    FFTrunkMass: "sumstats/harmonized_splitukb/splitUKB.23129.FFTrunkMass.EUR.GRCh37.processed.txt.gz"
+    FVCBest: "sumstats/harmonized_splitukb/splitUKB.20151.FVCBest.EUR.GRCh37.processed.txt.gz"
+    FluidIntellect: "sumstats/harmonized_splitukb/splitUKB.20016.FluidIntellect.EUR.GRCh37.processed.txt.gz"
+    GlassesAge: "sumstats/harmonized_splitukb/splitUKB.2217.GlassesAge.EUR.GRCh37.processed.txt.gz"
+    Glucose: "sumstats/harmonized_splitukb/splitUKB.30740.Glucose.EUR.GRCh37.processed.txt.gz"
+    GlycatedHaem: "sumstats/harmonized_splitukb/splitUKB.30750.GlycatedHaem.EUR.GRCh37.processed.txt.gz"
+    GripStrength: "sumstats/harmonized_splitukb/splitUKB.46.GripStrength.EUR.GRCh37.processed.txt.gz"
+    HRTAge: "sumstats/harmonized_splitukb/splitUKB.3536.HRTAge.EUR.GRCh37.processed.txt.gz"
+    HaematocritPct: "sumstats/harmonized_splitukb/splitUKB.30030.HaematocritPct.EUR.GRCh37.processed.txt.gz"
+    HaemoglobinConc: "sumstats/harmonized_splitukb/splitUKB.30020.HaemoglobinConc.EUR.GRCh37.processed.txt.gz"
+    HeelBMD: "sumstats/harmonized_splitukb/splitUKB.3148.HeelBMD.EUR.GRCh37.processed.txt.gz"
+    HeelBUA: "sumstats/harmonized_splitukb/splitUKB.3144.HeelBUA.EUR.GRCh37.processed.txt.gz"
+    Height: "sumstats/harmonized_splitukb/splitUKB.50.Height.EUR.GRCh37.processed.txt.gz"
+    IGF1: "sumstats/harmonized_splitukb/splitUKB.30770.IGF1.EUR.GRCh37.processed.txt.gz"
+    ImmRTFrac: "sumstats/harmonized_splitukb/splitUKB.30280.ImmRTFrac.EUR.GRCh37.processed.txt.gz"
+    LegFatPct: "sumstats/harmonized_splitukb/splitUKB.23115.LegFatPct.EUR.GRCh37.processed.txt.gz"
+    LegImpedance: "sumstats/harmonized_splitukb/splitUKB.23107.LegImpedance.EUR.GRCh37.processed.txt.gz"
+    LymphocytePct: "sumstats/harmonized_splitukb/splitUKB.30180.LymphocytePct.EUR.GRCh37.processed.txt.gz"
+    Lymphocytes: "sumstats/harmonized_splitukb/splitUKB.30120.Lymphocytes.EUR.GRCh37.processed.txt.gz"
+    MatchIDTime: "sumstats/harmonized_splitukb/splitUKB.20023.MatchIDTime.EUR.GRCh37.processed.txt.gz"
+    MeanCPHeme: "sumstats/harmonized_splitukb/splitUKB.30060.MeanCPHeme.EUR.GRCh37.processed.txt.gz"
+    MeanCPVol: "sumstats/harmonized_splitukb/splitUKB.30040.MeanCPVol.EUR.GRCh37.processed.txt.gz"
+    MeanRTVol: "sumstats/harmonized_splitukb/splitUKB.30260.MeanRTVol.EUR.GRCh37.processed.txt.gz"
+    MenarcheAge: "sumstats/harmonized_splitukb/splitUKB.2714.MenarcheAge.EUR.GRCh37.processed.txt.gz"
+    MenopauseAge: "sumstats/harmonized_splitukb/splitUKB.3581.MenopauseAge.EUR.GRCh37.processed.txt.gz"
+    MonocytePct: "sumstats/harmonized_splitukb/splitUKB.30190.MonocytePct.EUR.GRCh37.processed.txt.gz"
+    Monocytes: "sumstats/harmonized_splitukb/splitUKB.30130.Monocytes.EUR.GRCh37.processed.txt.gz"
+    Neuroticism: "sumstats/harmonized_splitukb/splitUKB.20127.Neuroticism.EUR.GRCh37.processed.txt.gz"
+    NeutrophilPct: "sumstats/harmonized_splitukb/splitUKB.30200.NeutrophilPct.EUR.GRCh37.processed.txt.gz"
+    Neutrophils: "sumstats/harmonized_splitukb/splitUKB.30140.Neutrophils.EUR.GRCh37.processed.txt.gz"
+    NumericTrail: "sumstats/harmonized_splitukb/splitUKB.20156.NumericTrail.EUR.GRCh37.processed.txt.gz"
+    OutdoorTime: "sumstats/harmonized_splitukb/splitUKB.1050.OutdoorTime.EUR.GRCh37.processed.txt.gz"
+    PWNotch: "sumstats/harmonized_splitukb/splitUKB.4199.PWNotch.EUR.GRCh37.processed.txt.gz"
+    Phosphate: "sumstats/harmonized_splitukb/splitUKB.30810.Phosphate.EUR.GRCh37.processed.txt.gz"
+    PlateletCrit: "sumstats/harmonized_splitukb/splitUKB.30090.PlateletCrit.EUR.GRCh37.processed.txt.gz"
+    PredFEVPct: "sumstats/harmonized_splitukb/splitUKB.20154.PredFEVPct.EUR.GRCh37.processed.txt.gz"
+    PulseRate: "sumstats/harmonized_splitukb/splitUKB.4194.PulseRate.EUR.GRCh37.processed.txt.gz"
+    RBCDistWidth: "sumstats/harmonized_splitukb/splitUKB.30070.RBCDistWidth.EUR.GRCh37.processed.txt.gz"
+    RBCs: "sumstats/harmonized_splitukb/splitUKB.30010.RBCs.EUR.GRCh37.processed.txt.gz"
+    ReticulocytePct: "sumstats/harmonized_splitukb/splitUKB.30240.ReticulocytePct.EUR.GRCh37.processed.txt.gz"
+    Reticulocytes: "sumstats/harmonized_splitukb/splitUKB.30250.Reticulocytes.EUR.GRCh37.processed.txt.gz"
+    SDMatches: "sumstats/harmonized_splitukb/splitUKB.20159.SDMatches.EUR.GRCh37.processed.txt.gz"
+    SHBG: "sumstats/harmonized_splitukb/splitUKB.30830.SHBG.EUR.GRCh37.processed.txt.gz"
+    SittingHeight: "sumstats/harmonized_splitukb/splitUKB.20015.SittingHeight.EUR.GRCh37.processed.txt.gz"
+    SodiumInUrine: "sumstats/harmonized_splitukb/splitUKB.30530.SodiumInUrine.EUR.GRCh37.processed.txt.gz"
+    SpheredCellV: "sumstats/harmonized_splitukb/splitUKB.30270.SpheredCellV.EUR.GRCh37.processed.txt.gz"
+    TVWatching: "sumstats/harmonized_splitukb/splitUKB.1070.TVWatching.EUR.GRCh37.processed.txt.gz"
+    Testosterone: "sumstats/harmonized_splitukb/splitUKB.30850.Testosterone.EUR.GRCh37.processed.txt.gz"
+    TimeToAnswer: "sumstats/harmonized_splitukb/splitUKB.4288.TimeToAnswer.EUR.GRCh37.processed.txt.gz"
+    TotalProtein: "sumstats/harmonized_splitukb/splitUKB.30860.TotalProtein.EUR.GRCh37.processed.txt.gz"
+    Triglycerides: "sumstats/harmonized_splitukb/splitUKB.30870.Triglycerides.EUR.GRCh37.processed.txt.gz"
+    Urea: "sumstats/harmonized_splitukb/splitUKB.30670.Urea.EUR.GRCh37.processed.txt.gz"
+    VitaminD: "sumstats/harmonized_splitukb/splitUKB.30890.VitaminD.EUR.GRCh37.processed.txt.gz"
+    WBCs: "sumstats/harmonized_splitukb/splitUKB.30000.WBCs.EUR.GRCh37.processed.txt.gz"
+    WaistCircum: "sumstats/harmonized_splitukb/splitUKB.48.WaistCircum.EUR.GRCh37.processed.txt.gz"
+    Weight: "sumstats/harmonized_splitukb/splitUKB.21002.Weight.EUR.GRCh37.processed.txt.gz"
+
+# bNMF parameters (identical to published arm)
+bnmf:
+  nreps: 50
+  K: 10
+  phi: 1.0
+  p_threshold:
+    EUR: 5e-8
+  maf_threshold: 0.01
+
+# LD clumping parameters (identical to published arm)
+ld_clump:
+  r2: 0.05
+  kb: 500
+  ref_panel:
+    EUR: "reference/1kg_eur/1000G.EUR.QC"
+
+# Trait missingness and proxy variant parameters (identical to published arm)
+trait_missingness:
+  missingness_threshold: 0.20
+  proxy_r2_threshold: 0.80
+  proxy_ld_window_kb: 1000
+  trait_correlation_threshold: 1.0    # Disabled — keep all traits that pass Bonferroni
+  impute_missing: "median"
+
+# HapMap3 SNP restriction
+hapmap3_snp_file: "reference/hapmap3/hapmap3_snps.tsv"
+
+# GTF for gene mapping (GRCh37)
+gtf_path: "/sc/arion/projects/paul_oreilly/lab/kestir01/Homo_sapiens.GRCh37.75.gtf"
+
+# Output directories (separate from published arm)
+results_dir: "results/a1_analysis_splitukb"
+figures_dir: "results/a1_analysis_splitukb/figures"
+
+# HPC settings
+hpc:
+  queue: "premium"
+  bnmf_walltime: "12:00"
+  bnmf_mem: 32000
+  bnmf_cores: 1

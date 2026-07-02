@@ -1,0 +1,128 @@
+# A1 Analysis Pipeline Configuration — Core Published Arm
+# -------------------------------------------------------
+# bNMF factorization using only the 30 EUR published GWAS traits that
+# have a counterpart in the split-UKB set. All GWAS sources per trait
+# are included; the correlation filter (|r| >= 0.80) prunes duplicates.
+
+ancestries:
+  - EUR
+
+# Variant universe selection GWAS (CAD + T2D) — same as all arms
+ref_gwas:
+  EUR:
+    CAD: "sumstats/harmonized/Tcheandjieu_NatureMed_2023.CAD.EUR.GRCh37.processed.txt.gz"
+    T2D: "sumstats/harmonized/Suzuki_Nature_2024.t2d.EUR.GRCh37.processed.txt.gz"
+
+# 30 shared-trait phenotypes (51 GWAS entries with all sources)
+trait_gwas:
+  fallback_order: []
+
+  EUR:
+    # --- Anthropometric ---
+    BMI_Huang2022: "sumstats/harmonized/Huang_NatureComms_2022.BMI.EUR.GRCh37.processed.txt.gz"
+    BMI_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.BMI.EUR.GRCh37.processed.txt.gz"
+    BMI_Verma2024: "sumstats/harmonized/Verma_Science_2024.BMI.EUR.GRCh37.processed.txt.gz"
+    Height_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.Height.EUR.GRCh37.processed.txt.gz"
+    Height_Verma2024: "sumstats/harmonized/Verma_Science_2024.Height.EUR.GRCh37.processed.txt.gz"
+    WaistCircum_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.WaistCircum.EUR.GRCh37.processed.txt.gz"
+    BMR_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.BMR.EUR.GRCh37.processed.txt.gz"
+
+    # --- Lipids ---
+    Triglycerides_Graham2021: "sumstats/harmonized/Graham_Nature_2021.Triglycerides.EUR.GRCh37.processed.txt.gz"
+    TotalCholesterol_Graham2021: "sumstats/harmonized/Graham_Nature_2021.TotalCholesterol.EUR.GRCh37.processed.txt.gz"
+    ApoA_Karczewski2025: "sumstats/harmonized/Karczewski_NatureGenetics_2025.ApoA.EUR.GRCh37.processed.txt.gz"
+
+    # --- Glycemic ---
+    Hba1c_Chen2021: "sumstats/harmonized/Chen_NatureGenetics_2021.Hba1c.EUR.GRCh37.processed.txt.gz"
+    Hba1c_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.Hba1c.EUR.GRCh37.processed.txt.gz"
+    Hba1c_Verma2024: "sumstats/harmonized/Verma_Science_2024.Hba1c.EUR.GRCh37.processed.txt.gz"
+    RandomGlucose_Lagou2023: "sumstats/harmonized/Lagou_NatGenet_2023.RandomGlucose.EUR.GRCh37.processed.txt.gz"
+
+    # --- Renal ---
+    Creatinine_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.Creatinine.EUR.GRCh37.processed.txt.gz"
+    Urea_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.Urea.EUR.GRCh37.processed.txt.gz"
+    Phosphate_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.Phosphate.EUR.GRCh37.processed.txt.gz"
+
+    # --- Mineral / vitamin ---
+    Calcium_UKB2025: "sumstats/harmonized/UKB_Nature_2025.Calcium.EUR.GRCh37.processed.txt.gz"
+    Calcium_Verma2024: "sumstats/harmonized/Verma_Science_2024.Calcium.EUR.GRCh37.processed.txt.gz"
+    VitD_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.VitD.EUR.GRCh37.processed.txt.gz"
+    Protein_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.Protein.EUR.GRCh37.processed.txt.gz"
+
+    # --- Endocrine / hormonal ---
+    SHBG_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.SHBG.EUR.GRCh37.processed.txt.gz"
+    Testosterone_UKB2025: "sumstats/harmonized/UKB_Nature_2025.Testosterone.EUR.GRCh37.processed.txt.gz"
+    IGF1_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.IGF1.EUR.GRCh37.processed.txt.gz"
+
+    # --- Hematologic ---
+    Hgb_Chen2020: "sumstats/harmonized/Chen_Cell_2020.Hgb.EUR.GRCh37.processed.txt.gz"
+    Hgb_Verma2024: "sumstats/harmonized/Verma_Science_2024.Hgb.EUR.GRCh37.processed.txt.gz"
+    WBC_Chen2020: "sumstats/harmonized/Chen_Cell_2020.WBC.EUR.GRCh37.processed.txt.gz"
+    WBC_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.WBC.EUR.GRCh37.processed.txt.gz"
+    WBC_Verma2024: "sumstats/harmonized/Verma_Science_2024.WBC.EUR.GRCh37.processed.txt.gz"
+    RBC_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.RBC.EUR.GRCh37.processed.txt.gz"
+    RBC_Verma2024: "sumstats/harmonized/Verma_Science_2024.RBC.EUR.GRCh37.processed.txt.gz"
+    MCV_Chen2020: "sumstats/harmonized/Chen_Cell_2020.MCV.EUR.GRCh37.processed.txt.gz"
+    MCV_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.MCV.EUR.GRCh37.processed.txt.gz"
+    MCV_Verma2024: "sumstats/harmonized/Verma_Science_2024.MCV.EUR.GRCh37.processed.txt.gz"
+    LymphocyteCount_Chen2020: "sumstats/harmonized/Chen_Cell_2020.LymphocyteCount.EUR.GRCh37.processed.txt.gz"
+    LymphocyteCount_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.LymphocyteCount.EUR.GRCh37.processed.txt.gz"
+    LymphocyteCount_Verma2024: "sumstats/harmonized/Verma_Science_2024.LymphocyteCount.EUR.GRCh37.processed.txt.gz"
+    MonocyteCount_Chen2020: "sumstats/harmonized/Chen_Cell_2020.MonocyteCount.EUR.GRCh37.processed.txt.gz"
+    MonocyteCount_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.MonocyteCount.EUR.GRCh37.processed.txt.gz"
+    MonocyteCount_Verma2024: "sumstats/harmonized/Verma_Science_2024.MonocyteCount.EUR.GRCh37.processed.txt.gz"
+    MonocyteCount_Vuckovic2020: "sumstats/harmonized/Vuckovic_Cell_2020.MonocyteCount.EUR.GRCh37.processed.txt.gz"
+    NeutrophilCount_Chen2020: "sumstats/harmonized/Chen_Cell_2020.NeutrophilCount.EUR.GRCh37.processed.txt.gz"
+    NeutrophilCount_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.NeutrophilCount.EUR.GRCh37.processed.txt.gz"
+    NeutrophilCount_Verma2024: "sumstats/harmonized/Verma_Science_2024.NeutrophilCount.EUR.GRCh37.processed.txt.gz"
+    Eosinophilcount_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.Eosinophilcount.EUR.GRCh37.processed.txt.gz"
+    ReticulocyteCount_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.ReticulocyteCount.EUR.GRCh37.processed.txt.gz"
+    MeanReticVol_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.MeanReticVol.EUR.GRCh37.processed.txt.gz"
+    RBCDistWidth_Chen2020: "sumstats/harmonized/Chen_Cell_2020.RBCDistWidth.EUR.GRCh37.processed.txt.gz"
+    RBCDistWidth_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.RBCDistWidth.EUR.GRCh37.processed.txt.gz"
+    RBCDistWidth_Verma2024: "sumstats/harmonized/Verma_Science_2024.RBCDistWidth.EUR.GRCh37.processed.txt.gz"
+
+    # --- Blood pressure (heart rate only) ---
+    HR_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.HR.EUR.GRCh37.processed.txt.gz"
+    HR_Verma2024: "sumstats/harmonized/Verma_Science_2024.HR.EUR.GRCh37.processed.txt.gz"
+
+# bNMF parameters (identical to full EUR arm)
+bnmf:
+  nreps: 50
+  K: 10
+  phi: 1.0
+  p_threshold:
+    EUR: 5e-8
+  maf_threshold: 0.01
+
+# LD clumping parameters (identical to full EUR arm)
+ld_clump:
+  r2: 0.05
+  kb: 500
+  ref_panel:
+    EUR: "reference/1kg_eur/1000G.EUR.QC"
+
+# Trait missingness and proxy variant parameters
+trait_missingness:
+  missingness_threshold: 0.20
+  proxy_r2_threshold: 0.80
+  proxy_ld_window_kb: 1000
+  trait_correlation_threshold: 0.80  # Prune correlated multi-source traits
+  impute_missing: "median"
+
+# HapMap3 SNP restriction
+hapmap3_snp_file: "reference/hapmap3/hapmap3_snps.tsv"
+
+# GTF for gene mapping (GRCh37)
+gtf_path: "/sc/arion/projects/paul_oreilly/lab/kestir01/Homo_sapiens.GRCh37.75.gtf"
+
+# Output directories (separate from full EUR arm)
+results_dir: "results/a1_analysis_core_published"
+figures_dir: "results/a1_analysis_core_published/figures"
+
+# HPC settings
+hpc:
+  queue: "premium"
+  bnmf_walltime: "12:00"
+  bnmf_mem: 32000
+  bnmf_cores: 1

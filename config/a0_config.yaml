@@ -1,0 +1,62 @@
+## a0_analysis configuration
+## LD score regression: 6 EUR traits, all pairwise genetic correlations
+## Reference: Suzuki Nature 2024 EUR T2D
+##
+## Per-trait liability-scale fields (used by 04b_liability_h2.R):
+##   n_cases / n_controls — GWAS case/control counts (drive sample prevalence P)
+##   pop_prevalence       — population prevalence K (UKB-derived; see footnote)
+##   n_total              — optional: force the munge N column to this total
+##                          sample size (used when the harmonized file carries
+##                          effective N rather than total N, e.g. Suzuki T2D)
+
+traits:
+  t2d:
+    file: sumstats/harmonized/Suzuki_Nature_2024.t2d.EUR.GRCh37.processed.txt.gz
+    label: EUR_T2D_Suzuki
+    is_reference: true
+    n_cases: 242283
+    n_controls: 1569730
+    n_total: 1812013      # harmonized file carries per-SNP effective N; munge on total N
+    pop_prevalence: 0.0871
+  cad:
+    file: sumstats/harmonized/Aragam_NatureGenetics_2022.CAD.EUR.GRCh37.processed.txt.gz
+    label: EUR_CAD_Aragam
+    n_cases: 181523
+    n_controls: 984197
+    pop_prevalence: 0.0681
+  angina:
+    file: sumstats/harmonized/Verma_Science_2024.Angina.EUR.GRCh37.processed.txt.gz
+    label: EUR_Angina
+    n_cases: 37399
+    n_controls: 385941
+    pop_prevalence: 0.1062
+  mi:
+    file: sumstats/harmonized/Verma_Science_2024.MI.EUR.GRCh37.processed.txt.gz
+    label: EUR_MI
+    n_cases: 39074
+    n_controls: 392979
+    pop_prevalence: 0.0364
+  stroke:
+    file: sumstats/harmonized/Mishra_Nature_2022.stroke.EUR.GRCh37.processed.txt.gz
+    label: EUR_Stroke
+    n_cases: 73652
+    n_controls: 1540428
+    pop_prevalence: 0.0141
+  pad:
+    file: sumstats/harmonized/Verma_Science_2024.PAD.EUR.GRCh37.processed.txt.gz
+    label: EUR_PAD
+    n_cases: 42552
+    n_controls: 383626
+    pop_prevalence: 0.0297
+
+reference:
+  hapmap3:     reference/hapmap3/hapmap3_snps.tsv
+  plink_1kg:   reference/1kg_eur/1000G.EUR.QC.   # prefix, chr appended as {prefix}{chr}
+  ld_scores:   reference/1kg_eur_ldscores/        # computed by 01_compute_ldscores.sh
+
+filters:
+  maf_threshold:        0.01
+  exclude_multiallelic: true
+  exclude_mhc:          true    # chr6:25-35Mb GRCh37
+
+results_dir: results/a0_analysis

@@ -1,0 +1,87 @@
+"""
+Snakefile_a1 — A1 bNMF analysis pipeline.
+
+Runs bNMF factorization per ancestry (EUR, AFR, META), then generates
+multi-panel visualizations + cross-ancestry comparison.
+
+Usage:
+  snakemake -s Snakefile_a1 -n                        # dry run
+  snakemake -s Snakefile_a1 --profile profiles/lsf    # HPC with LSF
+  snakemake -s Snakefile_a1 --cores 1                 # local run
+"""
+
+import os
+
+configfile: "config/a1_config.yaml"
+
+ANCESTRIES  = config["ancestries"]
+RESULTS_DIR = config["results_dir"]
+FIGURES_DIR = config["figures_dir"]
+
+localrules: all
+
+# ---------------------------------------------------------------------------
+# Target rule
+# ---------------------------------------------------------------------------
+
+rule all:
+    input:
+        expand(
+            os.path.join(RESULTS_DIR, "{ancestry}", "H_matrix_{ancestry}.tsv"),
+            ancestry=ANCESTRIES,
+        ),
+        os.path.join(FIGURES_DIR, "figure_main.png"),
+        os.path.join(FIGURES_DIR, "cross_ancestry_scatter.png"),
+
+# ---------------------------------------------------------------------------
+# Rule: run_bnmf — one job per ancestry
+# ---------------------------------------------------------------------------
+
+rule run_bnmf:
+    input:
+        config_file = "config/a1_config.yaml",
+    output:
+        h_matrix    = os.path.join(RESULTS_DIR, "{ancestry}", "H_matrix_{ancestry}.tsv"),
+        w_matrix    = os.path.join(RESULTS_DIR, "{ancestry}", "W_matrix_{ancestry}.tsv"),
+        filtered    = os.path.join(RESULTS_DIR, "{ancestry}", "filtered_variants_{ancestry}.tsv"),
+        prepared    = os.path.join(RESULTS_DIR, "{ancestry}", "prepared_matrix_{ancestry}.tsv"),
+        heatmap_w   = os.path.join(RESULTS_DIR, "{ancestry}", "heatmap_W_{ancestry}.png"),
+        heatmap_h   = os.path.join(RESULTS_DIR, "{ancestry}", "heatmap_H_{ancestry}.png"),
+        run_summary = os.path.join(RESULTS_DIR, "{ancestry}", "run_summary_{ancestry}.csv"),
+        summary_txt = os.path.join(RESULTS_DIR, "{ancestry}", "summary_{ancestry}.txt"),
+    threads: 1
+    resources:
+        mem_mb  = config.get("hpc", {}).get("bnmf_mem", 32000),
+        runtime = 720,
+    shell:
+        """
+        module load R/4.2.0
+        module load plink/1.90b6.21
+        export OMP_NUM_THREADS=1
+        export OPENBLAS_NUM_THREADS=1
+        Rscript scripts/a1_analysis/01_run_bnmf.R \
+            --config {input.config_file} \
+            --ancestry {wildcards.ancestry}
+        """
+
+# ---------------------------------------------------------------------------
+# Rule: visualize — assemble all figures (runs locally)
+# ---------------------------------------------------------------------------
+
+rule visualize:
+    input:
+        h_matrices = expand(
+            os.path.join(RESULTS_DIR, "{ancestry}", "H_matrix_{ancestry}.tsv"),
+            ancestry=ANCESTRIES,
+        ),
+        config_file = "config/a1_config.yaml",
+    output:
+        main_png    = os.path.join(FIGURES_DIR, "figure_main.png"),
+        scatter_png = os.path.join(FIGURES_DIR, "cross_ancestry_scatter.png"),
+    shell:
+        """
+        module load R/4.2.0
+        export OPENBLAS_NUM_THREADS=1
+        Rscript scripts/a1_analysis/02_visualize_results.R \
+            --config {input.config_file}
+        """

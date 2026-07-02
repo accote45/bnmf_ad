@@ -1,0 +1,36 @@
+## B2.2 PheWAS Configuration
+## Logistic regression: 10 META cluster PRS vs ICD10 3-char binary phenotypes
+## EUR validation sample, adjusted for age, age^2, sex, Batch, PC1-10
+
+ukb:
+  db_path: "/sc/arion/projects/paul_oreilly/data/ukb/phenotype/ukb18177.db"
+  withdrawn_file: "/sc/arion/projects/paul_oreilly/data/ukb/withdrawn/withdraw18177_398_20240119.txt"
+  icd10_tables:
+    - "f41202"   # primary ICD-10 diagnoses
+    - "f41204"   # secondary ICD-10 diagnoses
+
+b1_results:
+  prs_file: "results/b1_analysis/prs/cluster_prs_all.tsv"
+
+phenotypes:
+  covariate_file: "results/a0_analysis/prs_ct/covariates.txt"
+
+analysis:
+  sample_group: "eur_validation"
+  clusters: ["K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K9", "K10"]
+  icd10_chapters: ["E", "F", "G", "H", "I", "J", "K", "L", "M", "N"]
+  min_cases: 50
+
+cluster_labels:
+  K1: "Lpa"
+  K2: "Adiponectin"
+  K3: "Platelet"
+  K4: "SHBG"
+  K5: "Blood Pressure-Stature"
+  K6: "Metabolic"
+  K7: "Triglycerides-HDL"
+  K8: "ALP-LDL"
+  K9: "Obesity"
+  K10: "Glycemic"
+
+results_dir: "results/b2_2_analysis"
