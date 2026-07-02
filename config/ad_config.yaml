@@ -48,10 +48,13 @@ trait_gwas:
 
     # --- Metabolic / glycemic ---
     # (FastingInsulin dropped: no META version available. RandomGlucose added instead.)
+    # (FastingGlucose_Downie2022 dropped: source is p-value-only -> harmonized to an
+    #  empty header-only file; no working FastingGlucose .META. exists. RandomGlucose
+    #  + Hba1c + T2D + BMI cover the glycemic axis.)
+    # (Hba1c: Chen2021 .META. harmonized empty; use Verma_Science_2024 .META. instead.)
     T2D_Suzuki2024: "sumstats/harmonized/Suzuki_Nature_2024.t2d.META.GRCh37.processed.txt.gz"
-    FastingGlucose_Downie2022: "sumstats/harmonized/Downie_Diabetologia_2022.FastingGlucose.META.GRCh37.processed.txt.gz"
     RandomGlucose_Lagou2023: "sumstats/harmonized/Lagou_NatGenet_2023.RandomGlucose.META.GRCh37.processed.txt.gz"
-    Hba1c_Chen2021: "sumstats/harmonized/Chen_NatureGenetics_2021.Hba1c.META.GRCh37.processed.txt.gz"
+    Hba1c_Verma2024: "sumstats/harmonized/Verma_Science_2024.Hba1c.META.GRCh37.processed.txt.gz"
     BMI_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.BMI.META.GRCh37.processed.txt.gz"
 
     # --- Vascular ---

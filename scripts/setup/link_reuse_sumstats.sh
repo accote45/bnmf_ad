@@ -35,10 +35,12 @@ FILES=(
   "Karczewski_NatGenet_2025.WBC.META.GRCh37.processed.txt.gz"
   "Karczewski_NatGenet_2025.Eosinophilcount.META.GRCh37.processed.txt.gz"
   # --- Metabolic / glycemic ---
+  # NOTE: Downie FastingGlucose .META. and Chen Hba1c .META. harmonize to empty
+  # header-only files at SRC (Downie source is p-value-only). FastingGlucose is
+  # dropped; Hba1c uses the working Verma_Science_2024 .META. instead of Chen.
   "Suzuki_Nature_2024.t2d.META.GRCh37.processed.txt.gz"
-  "Downie_Diabetologia_2022.FastingGlucose.META.GRCh37.processed.txt.gz"
   "Lagou_NatGenet_2023.RandomGlucose.META.GRCh37.processed.txt.gz"
-  "Chen_NatureGenetics_2021.Hba1c.META.GRCh37.processed.txt.gz"
+  "Verma_Science_2024.Hba1c.META.GRCh37.processed.txt.gz"
   "Karczewski_NatGenet_2025.BMI.META.GRCh37.processed.txt.gz"
   # --- Vascular ---
   "Karczewski_NatGenet_2025.SBP.META.GRCh37.processed.txt.gz"
