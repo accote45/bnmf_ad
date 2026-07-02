@@ -81,7 +81,22 @@ the multi-ancestry comparison scripts.
 - Files are ~1 GB each -> **symlink, never copy**. `scripts/setup/link_reuse_sumstats.sh`
   links the 19 v1 reuse files into `sumstats/harmonized/`.
 
+## 1000G EUR reference panel (confirmed)
+
+- Location: `/sc/arion/projects/paul_oreilly/lab/lioul01/multiancestry_polygenic/reference/1kg_eur/`
+- **Read access CONFIRMED**; per-chromosome plink1 bfiles `1000G.EUR.QC.{1..22}.{bed,bim,fam}` (GRCh37).
+- Wire in via directory symlink (no copy):
+  ```
+  REF=/sc/arion/projects/paul_oreilly/lab/lioul01/multiancestry_polygenic/reference/1kg_eur
+  mkdir -p reference && ln -sfn "$REF" reference/1kg_eur
+  ```
+- Config `ld_clump.ref_panel.EUR: reference/1kg_eur/1000G.EUR.QC` resolves through it.
+
 ## AD GWAS reference (confirmed)
+
+- File on Minerva: `/sc/arion/projects/paul_oreilly/data/GWASs/NonBiobanks/raw_data/ad/PGC3_Unpublished/uffleman_top_loci_ad_gwas.xlsx`
+- Convert with `scripts/gwas_processing/convert_ad_loci.R` (default `--input` points at the file above)
+  -> `sumstats/harmonized/AD_PGC3_top127.EUR.GRCh37.processed.txt.gz`.
 
 - Source = the **127 significant loci** from the full-cohort AD analysis (not a subset).
 - Build: **hg19/GRCh37** (no liftover). Lead SNP coded `chr:pos:effect:other`.
@@ -94,11 +109,25 @@ the multi-ancestry comparison scripts.
 
 - [x] Confirm read access to `lioul01`'s harmonized sumstats — DONE.
 - [x] AD GWAS form/build confirmed (127 loci, hg19).
-- [ ] Decide data home on Minerva (personal `cotea02`/`accote45` space vs shared lab).
-- [ ] Clone `bnmf_ad` on Minerva; run `scripts/setup/link_reuse_sumstats.sh`.
+- [x] 1000G EUR reference panel access confirmed.
+- [x] Draft the 127-loci converter (`convert_ad_loci.R`) + EUR config skeleton (`ad_config.yaml`).
+- [ ] Decide data home on Minerva (personal `cotea02` space vs shared lab).
+- [ ] Clone `bnmf_ad` on Minerva; symlink `reference/1kg_eur`; run `link_reuse_sumstats.sh`.
+- [ ] Run `convert_ad_loci.R`; paste console output to confirm column parsing.
 - [ ] **Source the new AD-specific trait GWAS** (in progress — takes time).
-- [ ] Draft the 127-loci converter (ready to write; needs the actual file to test).
-- [ ] Finalize v1 trait list once new GWAS are in hand.
+- [ ] Append new traits to `config/ad_config.yaml`; finalize v1 trait list.
+
+## Minerva bring-up (once new GWAS are ready)
+
+```
+git clone https://github.com/accote45/bnmf_ad.git && cd bnmf_ad
+REF=/sc/arion/projects/paul_oreilly/lab/lioul01/multiancestry_polygenic/reference/1kg_eur
+mkdir -p reference && ln -sfn "$REF" reference/1kg_eur
+bash scripts/setup/link_reuse_sumstats.sh
+module load R/4.2.0 && module load plink/1.90b6.21
+Rscript scripts/gwas_processing/convert_ad_loci.R
+Rscript scripts/a1_analysis/01_run_bnmf.R --config config/ad_config.yaml --ancestry EUR
+```
 
 ## Phases
 
