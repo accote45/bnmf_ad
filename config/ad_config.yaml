@@ -1,0 +1,115 @@
+# AD bNMF Pipeline Configuration (EUR, v1)
+# ----------------------------------------
+# Retarget of the cardiometabolic bNMF pipeline to Alzheimer's disease.
+# Variant universe (rows) = AD full-cohort top loci (127 GW-significant leads).
+# Trait panel (columns) = AD-relevant quantitative-trait GWAS.
+# Single ancestry (EUR): no fallback, no cross-ancestry union clump.
+
+ancestries:
+  - EUR
+
+# ---------------------------------------------------------------------------
+# Reference GWAS = the AD variant universe (matrix ROWS).
+# Produced by scripts/gwas_processing/convert_ad_loci.R from the 127-loci table.
+# ---------------------------------------------------------------------------
+ref_gwas:
+  EUR:
+    AD: "sumstats/harmonized/AD_PGC3_top127.EUR.GRCh37.processed.txt.gz"
+
+# ---------------------------------------------------------------------------
+# Trait GWAS = matrix COLUMNS. Z-score of each AD lead is pulled from each file.
+# v1 = 19 reuse files (symlinked via scripts/setup/link_reuse_sumstats.sh).
+# ADD new AD-specific traits below as they are harmonized (see commented block).
+# ---------------------------------------------------------------------------
+trait_gwas:
+  fallback_order: []   # EUR-only: no fallback
+
+  EUR:
+    # --- Lipid / APOE axis ---
+    HDL_Graham2021: "sumstats/harmonized/Graham_Nature_2021.HDL.EUR.GRCh37.processed.txt.gz"
+    LDL_Graham2021: "sumstats/harmonized/Graham_Nature_2021.LDL.EUR.GRCh37.processed.txt.gz"
+    TotalCholesterol_Graham2021: "sumstats/harmonized/Graham_Nature_2021.TotalCholesterol.EUR.GRCh37.processed.txt.gz"
+    Triglycerides_Graham2021: "sumstats/harmonized/Graham_Nature_2021.Triglycerides.EUR.GRCh37.processed.txt.gz"
+    ApoA_Karczewski2025: "sumstats/harmonized/Karczewski_NatureGenetics_2025.ApoA.EUR.GRCh37.processed.txt.gz"
+    ApoB_Karczewski2025: "sumstats/harmonized/Karczewski_NatureGenetics_2025.ApoB.EUR.GRCh37.processed.txt.gz"
+
+    # --- Immune / inflammatory ---
+    CRP_Said2022: "sumstats/harmonized/Said_NatureComms_2022.CRP.EUR.GRCh37.processed.txt.gz"
+    LymphocyteCount_Chen2020: "sumstats/harmonized/Chen_Cell_2020.LymphocyteCount.EUR.GRCh37.processed.txt.gz"
+    MonocyteCount_Chen2020: "sumstats/harmonized/Chen_Cell_2020.MonocyteCount.EUR.GRCh37.processed.txt.gz"
+    NeutrophilCount_Chen2020: "sumstats/harmonized/Chen_Cell_2020.NeutrophilCount.EUR.GRCh37.processed.txt.gz"
+    WBC_Chen2020: "sumstats/harmonized/Chen_Cell_2020.WBC.EUR.GRCh37.processed.txt.gz"
+    Eosinophilcount_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.Eosinophilcount.EUR.GRCh37.processed.txt.gz"
+
+    # --- Metabolic / glycemic ---
+    T2D_Suzuki2024: "sumstats/harmonized/Suzuki_Nature_2024.t2d.EUR.GRCh37.processed.txt.gz"
+    FastingGlucose_Chen2021: "sumstats/harmonized/Chen_NatGenet_2021.FastingGlucose.EUR.GRCh37.processed.txt.gz"
+    FastingInsulin_Chen2021: "sumstats/harmonized/Chen_NatGenet_2021.FastingInsulin.EUR.GRCh37.processed.txt.gz"
+    Hba1c_Chen2021: "sumstats/harmonized/Chen_NatureGenetics_2021.Hba1c.EUR.GRCh37.processed.txt.gz"
+    BMI_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.BMI.EUR.GRCh37.processed.txt.gz"
+
+    # --- Vascular ---
+    SBP_Keaton2024: "sumstats/harmonized/Keaton_NatureGenetics_2024.SBP.EUR.GRCh37.processed.txt.gz"
+    DBP_Evangelou2018: "sumstats/harmonized/Evangelou_NatGenet_2018.DBP.EUR.GRCh37.processed.txt.gz"
+
+    # --- NEW AD-specific traits (add as harmonized) -------------------------
+    # Fluid biomarkers, neuroimaging, cognition, other neurodegeneration.
+    # Follow the same "TraitName_AuthorYear: <path>" pattern, e.g.:
+    # HippocampalVolume_Hibar2017: "sumstats/harmonized/Hibar_NatComms_2017.HippocampalVolume.EUR.GRCh37.processed.txt.gz"
+    # WMH_Sargurupremraj2020:      "sumstats/harmonized/Sargurupremraj_NatComms_2020.WMH.EUR.GRCh37.processed.txt.gz"
+    # CognitiveFunction_Davies2018:"sumstats/harmonized/Davies_NatComms_2018.CognitiveFunction.EUR.GRCh37.processed.txt.gz"
+    # EducationalAttainment_Okbay2022: "..."
+    # Parkinsons_Nalls2019:        "..."
+    # Depression_Howard2019:       "..."
+    # CSF_Abeta42_Deming2017:      "..."
+    # ------------------------------------------------------------------------
+
+# bNMF parameters
+bnmf:
+  nreps: 50
+  K: 10          # initial K; bNMF prunes toward the supported rank. Tune after v1.
+  phi: 1.0
+  p_threshold:
+    EUR: 5e-8    # all 127 leads are GW-significant; loosen only if you widen the universe
+  maf_threshold: 0.01
+
+# LD clumping (leads are already independent; this is a harmless idempotent pass)
+ld_clump:
+  r2: 0.05
+  kb: 500
+  ref_panel:
+    EUR: "reference/1kg_eur/1000G.EUR.QC"
+  union_clump_ancestries: []   # single ancestry: no cross-file union clump
+
+# Trait missingness + proxy (Smith et al. 2024)
+trait_missingness:
+  missingness_threshold: 0.20
+  proxy_r2_threshold: 0.80
+  proxy_ld_window_kb: 1000
+  trait_correlation_threshold:
+    EUR: 0.80
+  impute_missing: "median"
+
+# Allele alignment: single reference => orient each variant to the AD-risk allele.
+# No two-disease conflict, so first_occurrence (= align to the sole ref GWAS) is correct.
+allele_alignment:
+  enabled: true
+  conflict_rule: "first_occurrence"
+
+# HapMap3 restriction DISABLED so we keep all 127 AD leads (some may be absent
+# from HapMap3). Set to a path to re-enable.
+hapmap3_snp_file: null
+
+# GTF for gene mapping (GRCh37) — used by downstream visualization/gene mapping.
+gtf_path: "/sc/arion/projects/paul_oreilly/lab/kestir01/Homo_sapiens.GRCh37.75.gtf"
+
+# Output directories
+results_dir: "results/ad_analysis"
+figures_dir: "results/ad_analysis/figures"
+
+# HPC settings
+hpc:
+  queue: "express"
+  bnmf_walltime: "12:00"
+  bnmf_mem: 64000
+  bnmf_cores: 1
