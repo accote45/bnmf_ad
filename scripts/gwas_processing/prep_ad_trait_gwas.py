@@ -26,7 +26,10 @@ def open_any(path, mode="rt"):
 
 
 def prep_neuroticism(inp, out):
-    df = pd.read_csv(inp, sep="\t")
+    # dtype=str keeps CHR/POS/alleles verbatim ("1", not "1.0"). Otherwise the
+    # 100k+ rows with a missing CHR force pandas to read CHR as float, turning
+    # "1" into "1.0" and breaking gwaslab's build inference / liftover.
+    df = pd.read_csv(inp, sep="\t", dtype=str)
     for col in ("Z", "MAF_UKB", "N"):
         if col not in df.columns:
             raise SystemExit(f"neuroticism: expected column '{col}' not found in {inp}")
