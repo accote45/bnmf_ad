@@ -36,8 +36,15 @@ python -c "import gwaslab" || { echo "ERROR: gwaslab not importable in ${CONDA_E
 echo "Using python: $(which python)"
 
 # --- Paths ---------------------------------------------------------------
-# PROJECT_ROOT = the bnmf_ad clone (auto-detected from this script's location).
-PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+# `bsub < script` runs the script from stdin, so $0 can't locate it. LSF DOES
+# preserve the submission directory as CWD, so default PROJECT_ROOT to it.
+# => Submit from the bnmf_ad repo root, or pass PROJECT_ROOT=/path/to/bnmf_ad.
+PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
+if [ ! -f "${PROJECT_ROOT}/scripts/gwas_processing/check_build.py" ]; then
+  echo "ERROR: PROJECT_ROOT='${PROJECT_ROOT}' is not the bnmf_ad repo root."
+  echo "       Submit from the repo root, or pass PROJECT_ROOT=/path/to/bnmf_ad."
+  exit 1
+fi
 cd "${PROJECT_ROOT}"
 
 SCRIPTS="${PROJECT_ROOT}/scripts/gwas_processing"
