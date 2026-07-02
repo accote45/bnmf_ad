@@ -20,6 +20,11 @@ The pipeline builds a **variant × trait Z-score matrix** and factorizes it with
 
 - **Runs on Minerva (Mount Sinai LSF).** `module load R/4.2.0`, plink, and 1000G
   reference panels are expected there.
+- **gwaslab conda env** (for harmonization): `gwaslab` env, python 3.10, gwaslab 4.1.9.
+  Built with `ml anaconda3/2025.06` + classic-solver `conda create` + pip. Needed a
+  one-line fix for a gwaslab 4.1.9 import bug (`Union[str, pd.NA]` invalid annotation) —
+  see the recipe in `scripts/gwas_processing/harmonize_ad_traits.sh` header. The batch
+  script activates this env itself.
 - **Code is edited on the Mac**, pushed to GitHub, pulled on Minerva, run there.
 - **Scope (v1): trans-ancestry / META** — the 127 AD loci and the trait GWAS are
   both multi-ancestry, so the panel uses the `.META.` version of every trait.

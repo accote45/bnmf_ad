@@ -12,11 +12,25 @@
 # Chains: (optional preprocess) -> check_build.py -> harmonize_sumstats.py.
 # Output -> <bnmf_ad>/sumstats/harmonized/*.processed.txt.gz
 #
-# REQUIRES: a python env with gwaslab, pandas, numpy, scipy on PATH
-#   (e.g. `conda activate <your_gwaslab_env>` before running / in the job).
+# REQUIRES the gwaslab conda env (activated below). To (re)build it:
+#   ml anaconda3/2025.06
+#   conda create -y -n gwaslab python=3.10 --solver=classic
+#   source "$(conda info --base)/etc/profile.d/conda.sh"; conda activate gwaslab
+#   pip install gwaslab pandas numpy scipy
+#   # gwaslab 4.1.9 import fix (invalid pd.NA type annotation):
+#   sed -i 's/Union\[str, pd\.NA\]/Union[str, None]/g' \
+#     "$(python -c 'import gwaslab,os;print(os.path.dirname(gwaslab.__file__))')/hm/hm_harmonize_sumstats.py"
 
 set -uo pipefail
 export OPENBLAS_NUM_THREADS=1
+
+# --- Activate gwaslab env (self-contained for the LSF job) ---------------
+ANACONDA_MODULE="${ANACONDA_MODULE:-anaconda3/2025.06}"
+CONDA_ENV="${CONDA_ENV:-gwaslab}"
+module load "${ANACONDA_MODULE}" 2>/dev/null || true
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate "${CONDA_ENV}"
+python -c "import gwaslab" 2>/dev/null || { echo "ERROR: gwaslab not importable in env '${CONDA_ENV}'"; exit 1; }
 
 # --- Paths ---------------------------------------------------------------
 # PROJECT_ROOT = the bnmf_ad clone (auto-detected from this script's location).
