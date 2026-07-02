@@ -306,7 +306,7 @@ def harmonize(input_file, build_info_file, output_file, preferred_build="19",
         sumstats.data, input_file, columns, sep
     )
 
-    sumstats.basic_check(verbose=False, n_cores=n_cores)
+    sumstats.basic_check(verbose=False, threads=n_cores)
     qc["n_variants_raw"] = len(sumstats.data)
 
     # 3. Liftover if actual build differs from preferred build
@@ -315,7 +315,6 @@ def harmonize(input_file, build_info_file, output_file, preferred_build="19",
         sumstats.liftover(
             from_build=str(actual_build),
             to_build=str(preferred_build),
-            n_cores=n_cores,
         )
         qc["liftover_applied"] = True
 
