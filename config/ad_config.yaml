@@ -58,16 +58,16 @@ trait_gwas:
     SBP_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.SBP.META.GRCh37.processed.txt.gz"
     DBP_Karczewski2025: "sumstats/harmonized/Karczewski_NatGenet_2025.DBP.META.GRCh37.processed.txt.gz"
 
-    # --- NEW AD-specific traits (add as harmonized; use .META. files) ---------
-    # Fluid biomarkers, neuroimaging, cognition, other neurodegeneration.
-    # "TraitName_AuthorYear: <path>", e.g.:
-    # HippocampalVolume_Hibar2017: "sumstats/harmonized/Hibar_NatComms_2017.HippocampalVolume.META.GRCh37.processed.txt.gz"
-    # WMH_Sargurupremraj2020:      "sumstats/harmonized/Sargurupremraj_NatComms_2020.WMH.META.GRCh37.processed.txt.gz"
-    # CognitiveFunction_Davies2018:"sumstats/harmonized/Davies_NatComms_2018.CognitiveFunction.META.GRCh37.processed.txt.gz"
-    # EducationalAttainment_Okbay2022: "..."
-    # Parkinsons_Nalls2019:        "..."
-    # Depression_Howard2019:       "..."
-    # CSF_Abeta42_Deming2017:      "..."
+    # --- NEW AD-specific traits (harmonized via harmonize_ad_traits.sh) --------
+    # Neurodegeneration + AD biomarker (multi-ancestry / EUR-predominant)
+    ALS_vanRheenen2021: "sumstats/harmonized/vanRheenen_NatGenet_2021.ALS.META.GRCh37.processed.txt.gz"
+    Parkinsons_Kim2023: "sumstats/harmonized/Kim_NatGenet_2023.Parkinsons.META.GRCh37.processed.txt.gz"
+    CSF_Abeta42_Timsina2026: "sumstats/harmonized/Timsina_NatComms_2026.CSF_Abeta42.EUR.GRCh37.processed.txt.gz"
+    # Psychiatric / affective (EUR-predominant; interpret SCZ/BIP clusters cautiously)
+    Bipolar_PGC2025: "sumstats/harmonized/PGC_BD_2025.Bipolar.META.GRCh37.processed.txt.gz"
+    MDD_PGC2025: "sumstats/harmonized/PGC_MDD_2025.MDD.META.GRCh37.processed.txt.gz"
+    Neuroticism_Nagel2018: "sumstats/harmonized/Nagel_NatGenet_2018.Neuroticism.EUR.GRCh37.processed.txt.gz"
+    Schizophrenia_Trubetskoy2022: "sumstats/harmonized/Trubetskoy_Nature_2022.Schizophrenia.EUR.GRCh37.processed.txt.gz"
     # --------------------------------------------------------------------------
 
 # bNMF parameters

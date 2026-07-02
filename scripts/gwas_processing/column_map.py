@@ -23,6 +23,7 @@ COLUMN_MAP = {
     "RSID":       ["rsid"],
     "rs_id":      ["rsid"],
     "SNP":        ["snpid", "rsid"],  # Kanai (BOLT-LMM output)
+    "ID":         ["snpid", "rsid"],  # PGC sumstats-VCF (MDD 2025, SCZ wave3): rsID column
     "MarkerName": ["snpid", "rsid"],  # Evangelou, Sinnott-Armstrong
     "snpname":    ["snpid", "rsid"],  # Justice NatGenet 2019 (WHR)
     "variant":    ["snpid"],          # NealeLab UKB (CHR:POS:REF:ALT format)
@@ -114,6 +115,7 @@ COLUMN_MAP = {
     "Pvalue":        ["p"],        # Mahajan NatGenet 2022
     "METAL_Pvalue":  ["p"],
     "P":             ["p"],         # Evangelou
+    "PVAL":          ["p"],         # PGC sumstats-VCF (MDD 2025, SCZ wave3)
     "P-value":       ["p"],         # Teumer, Sinnott-Armstrong
     "pval_fe":       ["p"],         # Gurdasani (fixed-effects meta-analysis)
     "p.value":       ["p"],         # Sakaue (SAIGE output)
@@ -123,6 +125,8 @@ COLUMN_MAP = {
     # Sample size
     "num_samples": ["n"],
     "Neff":        ["n"],
+    "N_effective": ["n"],           # van Rheenen ALS 2021
+    "NEFF":        ["n"],           # PGC MDD 2025 (effective N)
     "N":           ["n"],
     "n":           ["n"],
     "N_total":          ["n"],

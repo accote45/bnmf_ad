@@ -119,8 +119,26 @@ the multi-ancestry comparison scripts.
 - [ ] Decide data home on Minerva (personal `cotea02` space vs shared lab).
 - [ ] Clone `bnmf_ad` on Minerva; symlink `reference/1kg_eur`; run `link_reuse_sumstats.sh`.
 - [ ] Run `convert_ad_loci.R`; paste console output to confirm column parsing.
-- [ ] **Source the new AD-specific trait GWAS** (in progress — takes time).
-- [ ] Append new traits to `config/ad_config.yaml`; finalize v1 trait list.
+- [x] Source + review the 7 new AD-specific trait GWAS.
+- [x] Harmonization tooling for them (`harmonize_ad_traits.sh` + `prep_ad_trait_gwas.py`
+      + column_map patches); appended to `config/ad_config.yaml` (26 traits total).
+- [ ] Run `harmonize_ad_traits.sh` on Minerva; verify the 7 QC JSONs + first-run output.
+- [ ] Symlink reuse (.META.) files; run converter; run bNMF.
+
+## New AD trait GWAS (raw at .../lab/cotea02/pathway_prs_ad/data/gwas_for_bnmf/)
+
+| Config key | Raw file | Build | Notes |
+|-----------|----------|-------|-------|
+| ALS_vanRheenen2021 | GCST90027163_buildGRCh37.tsv.gz | 37 | cross-anc; turnkey |
+| Parkinsons_Kim2023 | GCST90275127.tsv | 37 | multi-anc MR-MEGA; turnkey |
+| CSF_Abeta42_Timsina2026 | GCST90726396.tsv | **38** | EUR; auto liftover 38->37 |
+| Bipolar_PGC2025 | daner_pgc4_bd_multi_...HRCfrq | 37 | daner, space-delim, OR->beta |
+| MDD_PGC2025 | pgc-mdd2025_...tsv | 37 | PGC-VCF: prep strips `##` |
+| Neuroticism_Nagel2018 | sumstats_neuroticism_ctg_format.txt.gz | 37 | EUR; prep derives BETA/SE from Z |
+| Schizophrenia_Trubetskoy2022 | PGC3_SCZ_wave3.primary...vcf.tsv | 37 | EUR; PGC-VCF: prep strips `##` |
+
+Harmonize: `bsub < scripts/gwas_processing/harmonize_ad_traits.sh` (needs a python env
+with gwaslab/pandas/numpy/scipy). Outputs -> `sumstats/harmonized/`.
 
 ## Minerva bring-up (once new GWAS are ready)
 
