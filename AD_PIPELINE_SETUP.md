@@ -5,6 +5,24 @@ to discover **genetic subtypes of Alzheimer's disease (AD)**.
 
 Repo: https://github.com/accote45/bnmf_ad
 
+## ⏩ RESUME HERE (status as of 2026-07-02)
+
+- **Minerva project root:** `/sc/arion/projects/paul_oreilly/lab/cotea02/pathway_prs_ad/results/bnmf_ad`
+  (raw AD trait GWAS at `.../pathway_prs_ad/data/gwas_for_bnmf/`).
+- **Done:** repo cloned on Minerva; `reference/1kg_eur` + 19 reuse `.META.` traits symlinked;
+  AD reference converted (127 loci, `AD_PGC3_top127.META.GRCh37`); gwaslab env built
+  (`/hpc/users/cotea02/.conda/envs/gwaslab`, gwaslab 4.1.9 + pd.NA import patch);
+  6 of 7 new trait GWAS harmonized (ALS, Parkinsons, CSF Aβ42, Bipolar, MDD, Schizophrenia).
+- **In progress:** neuroticism harmonization (last of 7) — rerun after the `dtype=str` prep fix.
+  Check: `ls -l sumstats/harmonized/*Neuroticism*.processed.txt.gz`.
+- **NEXT STEP once neuroticism lands →** launch the bNMF:
+  ```
+  module load R/4.2.0 && module load plink/1.90b6.21
+  Rscript scripts/a1_analysis/01_run_bnmf.R --config config/ad_config.yaml --ancestry META
+  ```
+- **Machine switch:** all code is in GitHub, all data + jobs on Minerva. On a new computer:
+  `git clone https://github.com/accote45/bnmf_ad.git`, then SSH to Minerva as usual.
+
 ## Concept
 
 The pipeline builds a **variant × trait Z-score matrix** and factorizes it with bNMF:
