@@ -21,7 +21,10 @@ The pipeline builds a **variant × trait Z-score matrix** and factorizes it with
 - **Runs on Minerva (Mount Sinai LSF).** `module load R/4.2.0`, plink, and 1000G
   reference panels are expected there.
 - **Code is edited on the Mac**, pushed to GitHub, pulled on Minerva, run there.
-- **Scope (v1): EUR only** — one variant universe, one EUR LD panel.
+- **Scope (v1): trans-ancestry / META** — the 127 AD loci and the trait GWAS are
+  both multi-ancestry, so the panel uses the `.META.` version of every trait.
+  LD reference = EUR 1000G (standard approximation for a trans-ancestry set, as in
+  the original pipeline's META arm). Run label = `META`.
 
 ## Workflow
 
@@ -60,11 +63,13 @@ the multi-ancestry comparison scripts.
 
 ## Trait panel (draft — refine)
 
-**Reuse from existing cardiometabolic harmonized set (if readable on Minerva):**
-- Lipids / ApoE axis: LDL, HDL, TotalCholesterol, Triglycerides, ApoB, ApoA
-- Immune / inflammatory: CRP, Lymphocyte, Monocyte, Neutrophil, WBC counts
-- Metabolic: BMI, FastingGlucose, Hba1c (+ T2D as a trait)
-- Vascular: SBP, DBP
+**Reuse from existing harmonized set — 19 traits, `.META.` versions** (confirmed readable):
+- Lipids / ApoE axis: HDL, LDL, TotalCholesterol, Triglycerides (Graham2021); ApoA, ApoB (Karczewski2025)
+- Immune / inflammatory: CRP, Lymphocyte, Monocyte, Neutrophil, WBC, Eosinophil (Karczewski2025)
+- Metabolic: T2D (Suzuki2024), FastingGlucose (Downie2022), RandomGlucose (Lagou2023), Hba1c (Chen2021), BMI (Karczewski2025)
+- Vascular: SBP, DBP (Karczewski2025)
+- Note: FastingInsulin dropped (no META version); RandomGlucose used instead. New AD
+  traits must also be `.META.` for column consistency.
 
 **New AD-specific GWAS to source + harmonize:**
 - Fluid biomarkers: CSF/plasma Abeta42, p-tau, total-tau, pTau181, GFAP, NfL
@@ -96,7 +101,7 @@ the multi-ancestry comparison scripts.
 
 - File on Minerva: `/sc/arion/projects/paul_oreilly/data/GWASs/NonBiobanks/raw_data/ad/PGC3_Unpublished/uffleman_top_loci_ad_gwas.xlsx`
 - Convert with `scripts/gwas_processing/convert_ad_loci.R` (default `--input` points at the file above)
-  -> `sumstats/harmonized/AD_PGC3_top127.EUR.GRCh37.processed.txt.gz`.
+  -> `sumstats/harmonized/AD_PGC3_top127.META.GRCh37.processed.txt.gz`.
 
 - Source = the **127 significant loci** from the full-cohort AD analysis (not a subset).
 - Build: **hg19/GRCh37** (no liftover). Lead SNP coded `chr:pos:effect:other`.
@@ -126,7 +131,7 @@ mkdir -p reference && ln -sfn "$REF" reference/1kg_eur
 bash scripts/setup/link_reuse_sumstats.sh
 module load R/4.2.0 && module load plink/1.90b6.21
 Rscript scripts/gwas_processing/convert_ad_loci.R
-Rscript scripts/a1_analysis/01_run_bnmf.R --config config/ad_config.yaml --ancestry EUR
+Rscript scripts/a1_analysis/01_run_bnmf.R --config config/ad_config.yaml --ancestry META
 ```
 
 ## Phases

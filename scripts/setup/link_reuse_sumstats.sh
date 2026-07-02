@@ -17,31 +17,32 @@ DEST="sumstats/harmonized"
 
 mkdir -p "$DEST"
 
-# One canonical EUR file per v1 reuse trait (names taken from config/a1_config.yaml).
+# One canonical .META. file per v1 reuse trait (trans-ancestry framing;
+# names taken from config/a1_config.yaml's META block).
 FILES=(
   # --- Lipid / APOE axis ---
-  "Graham_Nature_2021.HDL.EUR.GRCh37.processed.txt.gz"
-  "Graham_Nature_2021.LDL.EUR.GRCh37.processed.txt.gz"
-  "Graham_Nature_2021.TotalCholesterol.EUR.GRCh37.processed.txt.gz"
-  "Graham_Nature_2021.Triglycerides.EUR.GRCh37.processed.txt.gz"
-  "Karczewski_NatureGenetics_2025.ApoA.EUR.GRCh37.processed.txt.gz"
-  "Karczewski_NatureGenetics_2025.ApoB.EUR.GRCh37.processed.txt.gz"
+  "Graham_Nature_2021.HDL.META.GRCh37.processed.txt.gz"
+  "Graham_Nature_2021.LDL.META.GRCh37.processed.txt.gz"
+  "Graham_Nature_2021.TotalCholesterol.META.GRCh37.processed.txt.gz"
+  "Graham_Nature_2021.Triglycerides.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatureGenetics_2025.ApoA.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatureGenetics_2025.ApoB.META.GRCh37.processed.txt.gz"
   # --- Immune / inflammatory ---
-  "Said_NatureComms_2022.CRP.EUR.GRCh37.processed.txt.gz"
-  "Chen_Cell_2020.LymphocyteCount.EUR.GRCh37.processed.txt.gz"
-  "Chen_Cell_2020.MonocyteCount.EUR.GRCh37.processed.txt.gz"
-  "Chen_Cell_2020.NeutrophilCount.EUR.GRCh37.processed.txt.gz"
-  "Chen_Cell_2020.WBC.EUR.GRCh37.processed.txt.gz"
-  "Karczewski_NatGenet_2025.Eosinophilcount.EUR.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.CRP.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.LymphocyteCount.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.MonocyteCount.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.NeutrophilCount.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.WBC.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.Eosinophilcount.META.GRCh37.processed.txt.gz"
   # --- Metabolic / glycemic ---
-  "Suzuki_Nature_2024.t2d.EUR.GRCh37.processed.txt.gz"
-  "Chen_NatGenet_2021.FastingGlucose.EUR.GRCh37.processed.txt.gz"
-  "Chen_NatGenet_2021.FastingInsulin.EUR.GRCh37.processed.txt.gz"
-  "Chen_NatureGenetics_2021.Hba1c.EUR.GRCh37.processed.txt.gz"
-  "Karczewski_NatGenet_2025.BMI.EUR.GRCh37.processed.txt.gz"
+  "Suzuki_Nature_2024.t2d.META.GRCh37.processed.txt.gz"
+  "Downie_Diabetologia_2022.FastingGlucose.META.GRCh37.processed.txt.gz"
+  "Lagou_NatGenet_2023.RandomGlucose.META.GRCh37.processed.txt.gz"
+  "Chen_NatureGenetics_2021.Hba1c.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.BMI.META.GRCh37.processed.txt.gz"
   # --- Vascular ---
-  "Keaton_NatureGenetics_2024.SBP.EUR.GRCh37.processed.txt.gz"
-  "Evangelou_NatGenet_2018.DBP.EUR.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.SBP.META.GRCh37.processed.txt.gz"
+  "Karczewski_NatGenet_2025.DBP.META.GRCh37.processed.txt.gz"
 )
 
 linked=0; missing=0

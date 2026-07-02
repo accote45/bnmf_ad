@@ -19,7 +19,7 @@
 #   module load R/4.2.0
 #   Rscript scripts/gwas_processing/convert_ad_loci.R \
 #     --input /sc/arion/projects/paul_oreilly/data/GWASs/NonBiobanks/raw_data/ad/PGC3_Unpublished/uffleman_top_loci_ad_gwas.xlsx \
-#     --output sumstats/harmonized/AD_PGC3_top127.EUR.GRCh37.processed.txt.gz
+#     --output sumstats/harmonized/AD_PGC3_top127.META.GRCh37.processed.txt.gz
 #
 # Column names default to the observed header but can be overridden via flags
 # (--leadsnp-col, --beta-col, --se-col, --z-col, --n-col, --rsid-col, --sheet).
@@ -38,7 +38,7 @@ get_arg <- function(flag, default = NULL) {
 
 input_path  <- get_arg("--input",
   "/sc/arion/projects/paul_oreilly/data/GWASs/NonBiobanks/raw_data/ad/PGC3_Unpublished/uffleman_top_loci_ad_gwas.xlsx")
-output_path <- get_arg("--output", "sumstats/harmonized/AD_PGC3_top127.EUR.GRCh37.processed.txt.gz")
+output_path <- get_arg("--output", "sumstats/harmonized/AD_PGC3_top127.META.GRCh37.processed.txt.gz")
 sheet       <- get_arg("--sheet", 1)
 
 col_leadsnp <- get_arg("--leadsnp-col", "LeadSNP")   # coded chr:pos:effect:other
