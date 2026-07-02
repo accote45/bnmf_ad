@@ -1,0 +1,91 @@
+# AD bNMF Pipeline — Setup & Plan
+
+Adapting the cardiometabolic bNMF pipeline (from `latlio/multiancestry_polygenic`)
+to discover **genetic subtypes of Alzheimer's disease (AD)**.
+
+Repo: https://github.com/accote45/bnmf_ad
+
+## Concept
+
+The pipeline builds a **variant × trait Z-score matrix** and factorizes it with bNMF:
+
+- **Rows = variant universe.** Genome-wide-significant, MAF-filtered, LD-clumped SNPs
+  from the *reference* GWAS. In the original: CAD + T2D. **Here: the AD GWAS.**
+- **Columns = trait panel.** A set of quantitative-trait GWAS; each row variant's
+  Z-score is pulled from each trait GWAS.
+- **bNMF → K clusters** = latent genetic subtypes, each defined by a trait signature
+  (W = variants × K, H = K × traits).
+
+## Environment
+
+- **Runs on Minerva (Mount Sinai LSF).** `module load R/4.2.0`, plink, and 1000G
+  reference panels are expected there.
+- **Code is edited on the Mac**, pushed to GitHub, pulled on Minerva, run there.
+- **Scope (v1): EUR only** — one variant universe, one EUR LD panel.
+
+## Workflow
+
+```
+edit on Mac  ->  git push  ->  git pull on Minerva  ->  run Rscript / bsub
+```
+
+Data (AD GWAS, trait GWAS, 1000G panels) lives on Minerva under
+`sumstats/`, `reference/` — both git-ignored, never committed.
+
+## Pipeline entry points (what we keep)
+
+| Step | Script | Role |
+|------|--------|------|
+| Harmonize GWAS | `scripts/gwas_processing/harmonize_sumstats.py` (+ `check_build.py`, `column_map.py`) | Raw sumstats -> `*.processed.txt.gz` (VAR_ID, aligned alleles, Z/BETA/SE, GRCh37) |
+| Run bNMF | `scripts/a1_analysis/01_run_bnmf.R` | QC + clump + Z-matrix + proxy + allele-align + bNMF |
+| bNMF math | `scripts/a1_analysis/bnmf_algorithm.R` | Unchanged engine |
+| Prep helpers | `scripts/a1_analysis/prep_bnmf.R` | QC / clumping / Z-matrix / allele alignment |
+| Visualize | `scripts/a1_analysis/02_visualize_results.R` | W/H heatmaps, trait-signature figures |
+
+Single ancestry => **Snakemake not required**; run the Rscript directly.
+
+Dropped (CAD/T2D-specific): `09_cad_t2d_spectrum.R`, CAD/T2D cluster-label blocks,
+the multi-ancestry comparison scripts.
+
+## Key config changes (new `config/ad_config.yaml`)
+
+- `ancestries: [EUR]`
+- `ref_gwas.EUR: { AD: sumstats/harmonized/<AD_gwas>.processed.txt.gz }`
+- `trait_gwas.EUR: { ...AD-relevant panel... }`
+- `bnmf.p_threshold.EUR: 5e-8` (loosen if AD GWAS is underpowered)
+- `allele_alignment.conflict_rule: first_occurrence`
+  (single reference => orient each variant to the AD risk allele; no two-disease
+  conflict to resolve — the CAD/T2D `strongest` logic isn't needed)
+- EUR 1000G panel + HapMap3 paths as in the original `a1_config.yaml`
+
+## Trait panel (draft — refine)
+
+**Reuse from existing cardiometabolic harmonized set (if readable on Minerva):**
+- Lipids / ApoE axis: LDL, HDL, TotalCholesterol, Triglycerides, ApoB, ApoA
+- Immune / inflammatory: CRP, Lymphocyte, Monocyte, Neutrophil, WBC counts
+- Metabolic: BMI, FastingGlucose, Hba1c (+ T2D as a trait)
+- Vascular: SBP, DBP
+
+**New AD-specific GWAS to source + harmonize:**
+- Fluid biomarkers: CSF/plasma Abeta42, p-tau, total-tau, pTau181, GFAP, NfL
+- Neuroimaging: hippocampal volume, total brain volume, WMH, cortical thickness
+- Cognitive / reserve: general cognitive function, educational attainment
+- Related: PD / ALS / FTD-LBD, parental lifespan / longevity, depression, sleep
+
+## Open items / TODO
+
+- [ ] Confirm read access to `lioul01`'s harmonized cardiometabolic sumstats on
+      Minerva (else re-harmonize the ones we reuse).
+- [ ] Decide data home on Minerva (personal `accote45` space vs shared lab).
+- [ ] **Provide the AD GWAS** (path/citation, genome build, column format) -> Phase 1.
+- [ ] Finalize v1 trait list.
+- [ ] Clone `bnmf_ad` on Minerva.
+
+## Phases
+
+0. Repo/workflow setup  ← (this doc; .gitignore cleanup done)
+1. Harmonize AD GWAS (reference / variant universe)
+2. Assemble trait panel (reuse + new)
+3. Write `config/ad_config.yaml`
+4. Run `01_run_bnmf.R` + `02_visualize_results.R` (EUR)
+5. Iterate: tune K, p-threshold, correlation filter; interpret AD subtypes

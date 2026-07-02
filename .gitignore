@@ -44,3 +44,11 @@ Rplots.pdf
 
 # stray PLINK run log at repo root
 /plink.log
+
+# macOS Finder metadata
+.DS_Store
+
+# R temp/session artifacts
+.RDataTmp*
+.Rhistory
+.Rproj.user/
