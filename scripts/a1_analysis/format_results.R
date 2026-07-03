@@ -13,7 +13,8 @@ library(data.table)
 #' @param variant_ids Character vector of variant IDs
 #' @param output_dir Directory to write output files
 #' @return List with optimal K, W matrix, H matrix
-summarize_bnmf <- function(results_list, trait_names, variant_ids, output_dir, ancestry) {
+summarize_bnmf <- function(results_list, trait_names, variant_ids, output_dir, ancestry,
+                           select_k = NULL) {
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
   # Determine optimal K (most frequent converged K)
@@ -22,6 +23,22 @@ summarize_bnmf <- function(results_list, trait_names, variant_ids, output_dir, a
   optimal_k <- as.integer(names(k_table)[which.max(k_table)])
   cat(sprintf("Optimal K = %d (appeared in %d/%d replicates)\n",
               optimal_k, max(k_table), length(results_list)))
+
+  # Optional override: force a specific K (sensitivity analysis). The default
+  # selector is frequency-only and ignores that a rarer K may have better
+  # evidence/error, so this lets us inspect that K's clusters directly. Falls
+  # back to the modal K if no replicate converged at the requested value.
+  if (!is.null(select_k)) {
+    select_k <- as.integer(select_k)
+    if (select_k %in% k_values) {
+      optimal_k <- select_k
+      cat(sprintf("Override: selecting K = %d (%d/%d replicates) instead of modal K\n",
+                  optimal_k, sum(k_values == select_k), length(results_list)))
+    } else {
+      cat(sprintf("WARNING: select_k=%d requested but no replicate converged there; keeping modal K=%d\n",
+                  select_k, optimal_k))
+    }
+  }
 
   # Select best run (among those with optimal K, pick lowest final error)
   optimal_runs <- which(k_values == optimal_k)

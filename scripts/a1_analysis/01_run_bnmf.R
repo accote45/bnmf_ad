@@ -17,6 +17,11 @@ ancestry    <- NULL
 if ("--config" %in% args)   config_path <- args[which(args == "--config") + 1]
 if ("--ancestry" %in% args) ancestry    <- args[which(args == "--ancestry") + 1]
 
+# Optional: force a specific K instead of the modal one (sensitivity analysis).
+# CLI takes precedence over cfg$bnmf$select_k (set below once cfg is loaded).
+select_k <- NULL
+if ("--select-k" %in% args) select_k <- as.integer(args[which(args == "--select-k") + 1])
+
 if (is.null(config_path) || is.null(ancestry)) {
   stop("Usage: Rscript 01_run_bnmf.R --config <config.yaml> --ancestry <ANC>")
 }
@@ -83,8 +88,15 @@ if (use_trait_missingness) {
   impute_method         <- ifelse(is.null(miss_cfg$impute_missing), "median", miss_cfg$impute_missing)
 }
 
+# Config fallback for select_k (CLI --select-k already parsed above wins)
+if (is.null(select_k) && !is.null(cfg$bnmf$select_k)) select_k <- as.integer(cfg$bnmf$select_k)
+
 results_dir <- cfg$results_dir
-output_dir  <- file.path(project_root, results_dir, ancestry)
+# When forcing a K, write to a separate <ancestry>_k<N> dir so the default
+# (modal-K) results are left intact for side-by-side comparison.
+output_subdir <- if (is.null(select_k)) ancestry else sprintf("%s_k%d", ancestry, select_k)
+output_dir  <- file.path(project_root, results_dir, output_subdir)
+if (!is.null(select_k)) cat(sprintf("select_k = %d -> writing to %s/\n", select_k, output_subdir))
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Resolve relative paths
@@ -323,7 +335,8 @@ summary_result <- summarize_bnmf(
   trait_names  = trait_names,
   variant_ids  = rownames(nonneg_matrix),
   output_dir   = output_dir,
-  ancestry     = ancestry
+  ancestry     = ancestry,
+  select_k     = select_k
 )
 
 # 7. Heatmaps

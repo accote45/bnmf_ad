@@ -33,7 +33,10 @@ cd "${PROJECT_ROOT}"
 
 CONFIG="${CONFIG:-config/ad_config.yaml}"
 ANCESTRY="${ANCESTRY:-META}"
+SELECT_K="${SELECT_K:-}"          # optional: force a specific K (e.g. SELECT_K=4)
 [ -f "${CONFIG}" ] || { echo "ERROR: config not found: ${CONFIG}"; exit 1; }
+EXTRA_ARGS=""
+[ -n "${SELECT_K}" ] && EXTRA_ARGS="--select-k ${SELECT_K}"
 
 mkdir -p logs/lsf
 
@@ -47,12 +50,13 @@ echo "Host:        $(hostname)"
 echo "PROJECT_ROOT: ${PROJECT_ROOT}"
 echo "Config:      ${CONFIG}"
 echo "Ancestry:    ${ANCESTRY}"
+echo "Select K:    ${SELECT_K:-<modal>}"
 echo "R:           $(which Rscript)"
 echo "plink:       $(which plink)"
 echo "Started:     $(date)"
 
 # --- Run -----------------------------------------------------------------
-Rscript scripts/a1_analysis/01_run_bnmf.R --config "${CONFIG}" --ancestry "${ANCESTRY}"
+Rscript scripts/a1_analysis/01_run_bnmf.R --config "${CONFIG}" --ancestry "${ANCESTRY}" ${EXTRA_ARGS}
 status=$?
 
 echo "Finished:    $(date)  (exit ${status})"
