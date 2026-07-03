@@ -120,6 +120,18 @@ hapmap3_snp_file: null
 # GTF for gene mapping (GRCh37) — used by downstream visualization/gene mapping.
 gtf_path: "/sc/arion/projects/paul_oreilly/lab/kestir01/Homo_sapiens.GRCh37.75.gtf"
 
+# Biological cluster labels for figures (02_visualize_results.R). Keyed by this
+# run's K-numbering (no-APOE, K=4, best replicate 2): K1=FTD/ALS neurodegeneration
+# (GRN/TMEM106B/MAPT/TNIP1), K2=immune (WBC/eosinophil/CRP; SCIMP/RASGRP1),
+# K3=metabolic (HDL+/glycemic; SPI1/KAT8/ALDOA), K4=lipid (ABCA1/cholesterol).
+# RE-CHECK these if the bNMF is re-run — cluster numbering is not stable.
+cluster_labels:
+  META:
+    K1: "Neurodegeneration (FTD/ALS)"
+    K2: "Immune"
+    K3: "Metabolic"
+    K4: "Lipid"
+
 # Output directories
 results_dir: "results/ad_analysis"
 figures_dir: "results/ad_analysis/figures"

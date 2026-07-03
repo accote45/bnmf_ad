@@ -41,6 +41,28 @@ gwas_traits <- unique(unlist(lapply(cfg$trait_gwas, names)))
 
 dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
 
+# --- Display-name helpers for cleaner figures ------------------------------
+# Strip the "_Author2024" GWAS-source tag and underscores from trait names,
+# e.g. "ALS_vanRheenen2021" -> "ALS", "CSF_Abeta42_Timsina2026" -> "CSF Abeta42".
+clean_trait <- function(x) gsub("_", " ", sub("_[A-Za-z]+\\d{4}$", "", x))
+
+# Biological cluster labels from config: cfg$cluster_labels[[anc]][[K]] (e.g.
+# K1 -> "Neurodegeneration"). Falls back to the raw K id when not configured.
+# NOTE: keyed by this run's K-numbering; re-check if the bNMF is re-run.
+relabel_cluster <- function(k, anc) {
+  m <- cfg$cluster_labels[[anc]]
+  vapply(as.character(k), function(kk) {
+    lab <- if (!is.null(m)) m[[kk]] else NULL
+    if (is.null(lab)) kk else lab
+  }, character(1), USE.NAMES = FALSE)
+}
+
+# Gene panel (plot_panel_g) keys labels as "anc K" (e.g. "META K1"); build that view.
+cluster_labels_g <- setNames(lapply(names(cfg$cluster_labels), function(anc) {
+  mp <- cfg$cluster_labels[[anc]]
+  setNames(as.list(unlist(mp)), paste(anc, names(mp)))
+}), names(cfg$cluster_labels))
+
 
 # ============================================================================
 # Load data
@@ -105,6 +127,8 @@ plot_panel_a <- function(h_list) {
     scale_fill_gradient2(low = "steelblue4", mid = "white", high = "firebrick3",
                          midpoint = 0, name = "Net Weight\n(pos \u2212 neg)") +
     facet_wrap(~ ancestry_label, ncol = 2, scales = "free_y") +
+    scale_x_discrete(labels = clean_trait) +
+    scale_y_discrete(labels = function(k) relabel_cluster(k, names(h_list)[[1]])) +
     theme_big_text() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
           strip.text = element_text(face = "bold")) +
@@ -157,13 +181,15 @@ plot_panel_c <- function(h_list) {
       rename(cluster = Cluster) %>%
       select(ancestry, cluster, trait, direction, weight_display)
   }) %>%
-    mutate(facet_label = paste(ancestry, "/", cluster))
+    mutate(facet_label = mapply(function(a, k) paste0(a, " / ", relabel_cluster(k, a)),
+                                ancestry, cluster, USE.NAMES = FALSE))
 
   ggplot(bar_df, aes(x = trait, y = weight_display, fill = direction)) +
     geom_col(position = "identity", width = 0.7) +
     geom_hline(yintercept = 0, linewidth = 0.3) +
     scale_fill_manual(values = c("pos" = "#4A90D9", "neg" = "#D94A4A"),
                       labels = c("pos" = "Positive", "neg" = "Negative"), name = "Direction") +
+    scale_x_discrete(labels = clean_trait) +
     facet_wrap(~ facet_label, scales = "free_y") +
     theme_big_text() + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 9)) +
     labs(x = "Trait", y = "Weight")
@@ -454,7 +480,8 @@ cat("  Panel B: Bar plots...\n")
 pc <- plot_panel_c(h_list)
 
 cat("  Panel C: Gene bars...\n")
-pg_list <- plot_panel_g(results_dir, active_ancestries, gtf_path)
+pg_list <- plot_panel_g(results_dir, active_ancestries, gtf_path,
+                        cluster_labels = cluster_labels_g)
 
 
 # --- Save individual panels ---
