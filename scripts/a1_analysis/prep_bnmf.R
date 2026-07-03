@@ -255,7 +255,8 @@ ld_clump <- function(dt, ref_panel_prefix, clump_r2 = 0.05, clump_kb = 500,
 #' @return List with $data (filtered data.table) and $qc_report (data.frame of step counts)
 qc_variants <- function(gwas_file, p_threshold = 5e-8, maf_threshold = 0.001,
                         ref_panel_prefix = NULL, clump_r2 = 0.05, clump_kb = 500,
-                        plink_bin = "plink", hapmap3_file = NULL) {
+                        plink_bin = "plink", hapmap3_file = NULL,
+                        exclude_regions = NULL) {
 
   gwas_label <- sub("\\.gz$", "", basename(gwas_file))
   qc_log <- list()  # step_name -> variants_remaining
@@ -354,6 +355,24 @@ qc_variants <- function(gwas_file, p_threshold = 5e-8, maf_threshold = 0.001,
   cat(sprintf("    [6] After MHC exclusion (chr6:25-35Mb): %d (removed %d)\n",
               nrow(dt), n_before - nrow(dt)))
 
+  # Step 6b: Config-driven region exclusion (e.g. APOE +/- 1Mb). Each region is
+  # a list(chr, start, end, label); variants inside any region are dropped.
+  if (!is.null(exclude_regions) && length(exclude_regions) > 0) {
+    for (reg in exclude_regions) {
+      n_before <- nrow(dt)
+      rchr   <- as.integer(reg$chr)
+      rstart <- as.numeric(reg$start)
+      rend   <- as.numeric(reg$end)
+      rlabel <- if (!is.null(reg$label)) reg$label else
+                  sprintf("chr%d:%.0f-%.0f", rchr, rstart, rend)
+      in_reg <- dt$CHR == rchr & dt$POS >= rstart & dt$POS <= rend
+      dt <- dt[!in_reg]
+      cat(sprintf("    [6b] After excluding %s: %d (removed %d)\n",
+                  rlabel, nrow(dt), n_before - nrow(dt)))
+    }
+    qc_log[["6b_region_exclusion"]] <- nrow(dt)
+  }
+
   # Step 7: LD clumping
   n_before <- nrow(dt)
   if (!is.null(ref_panel_prefix)) {
@@ -406,7 +425,8 @@ qc_variants <- function(gwas_file, p_threshold = 5e-8, maf_threshold = 0.001,
 qc_variants_multi <- function(gwas_files, p_threshold = 5e-8, maf_threshold = 0.001,
                               ref_panel_prefix = NULL, clump_r2 = 0.05, clump_kb = 500,
                               plink_bin = "plink", hapmap3_file = NULL,
-                              union_clump = FALSE, union_hapmap3_file = NULL) {
+                              union_clump = FALSE, union_hapmap3_file = NULL,
+                              exclude_regions = NULL) {
   all_variants <- data.table()
   all_reports <- data.frame()
 
@@ -417,7 +437,8 @@ qc_variants_multi <- function(gwas_files, p_threshold = 5e-8, maf_threshold = 0.
                           ref_panel_prefix = ref_panel_prefix,
                           clump_r2 = clump_r2, clump_kb = clump_kb,
                           plink_bin = plink_bin,
-                          hapmap3_file = hapmap3_file)
+                          hapmap3_file = hapmap3_file,
+                          exclude_regions = exclude_regions)
     all_variants <- rbind(all_variants, result$data, fill = TRUE)
     all_reports <- rbind(all_reports, result$qc_report)
   }

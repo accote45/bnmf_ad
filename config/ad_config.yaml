@@ -82,6 +82,13 @@ bnmf:
     META: 5e-8   # all 127 leads are GW-significant (max lead P = 4.89e-8)
   maf_threshold: 0.001   # keep low-freq AD leads (e.g. PLCG2, MAF ~0.97%); only 1 lead <1%
 
+# Primary analysis EXCLUDES the APOE region so subtypes reflect non-APOE
+# genetic structure (APOE's outsized effect otherwise dominates the
+# factorization / anchors the amyloid cluster). Window = APOE gene
+# (GRCh37 chr19:45,409,039-45,412,650) +/- 1 Mb. Drops the e4 lead rs429358.
+exclude_regions:
+  - { chr: 19, start: 44409039, end: 46412650, label: "APOE gene +/- 1Mb" }
+
 # LD clumping. Leads are already independent -> harmless idempotent pass.
 # EUR 1000G panel is the standard LD approximation for a trans-ancestry set.
 ld_clump:

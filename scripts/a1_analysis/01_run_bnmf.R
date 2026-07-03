@@ -185,7 +185,8 @@ qc_result <- qc_variants_multi(ref_gwas_paths, p_threshold = p_threshold,
                                 # For union-clump ancestries, HapMap3 is applied
                                 # at the union level (before the union clump)
                                 # inside qc_variants_multi; see block below.
-                                union_hapmap3_file = if (union_clump) hapmap3_path else NULL)
+                                union_hapmap3_file = if (union_clump) hapmap3_path else NULL,
+                                exclude_regions = cfg$exclude_regions)
 filtered <- qc_result$data
 
 # HapMap3 restriction (union-clump ancestries already restricted in the union step)
